@@ -5,6 +5,8 @@ import { navigate } from "../navigationRef";
 
 const authProvider = (state, action) => {
   switch (action.type) {
+    case "signin":
+      return { errorMessage: "", token: action.payload };
     case "signup":
       return { errorMessage: "", token: action.payload };
     case "add_error":
@@ -23,6 +25,7 @@ const signup = dispatch => async ({ email, password }) => {
     await AsyncStorage.setItem("token", response.data.token);
     // If we sign up, modify our state, and say we're authenticated
     dispatch({ type: "signup", payload: response.data.token });
+
     console.log(response.data);
 
     navigate("TrackList");
@@ -34,12 +37,21 @@ const signup = dispatch => async ({ email, password }) => {
   }
 };
 
-const signin = dispatch => {
-  return ({ email, password }) => {
-    // Try to sign in
-    // Handle success by updating state
-    // Handle failure by throwing an error
-  };
+const signin = dispatch => async ({ email, password }) => {
+  try {
+    const response = await trackerApi.post("/signin", { email, password });
+
+    await AsyncStorage.setItem("token", response.data.token);
+
+    dispatch({ type: "signin", payload: response.data.token });
+
+    navigate("TrackList");
+  } catch (err) {
+    dispatch({
+      type: "add_error",
+      payload: "Something went wrong with sign in"
+    });
+  }
 };
 
 const signout = dispatch => {
