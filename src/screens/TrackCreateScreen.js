@@ -2,14 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { Text } from "react-native-elements";
 import { SafeAreaView } from "react-navigation";
+import TrackForm from "../components/TrackForm";
 // expo-location has a bug, decline of location doesn't result in error
 import {
   requestPermissionsAsync,
   watchPositionAsync,
   Accuracy
 } from "expo-location";
-import Map from "./components/Map";
-import Spacer from "./components/Spacer";
+import Map from "../components/Map";
+import Spacer from "../components/Spacer";
 
 const TrackCreateScreen = () => {
   const [err, setErr] = useState(null);
@@ -42,6 +43,7 @@ const TrackCreateScreen = () => {
       <Spacer />
       <Map />
       {err ? <Text>Please enable location services</Text> : null}
+      <TrackForm />
     </SafeAreaView>
   );
 };
