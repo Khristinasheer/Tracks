@@ -10,9 +10,11 @@ export default (shouldTrack, callback) => {
 
   useEffect(() => {
     let subscriber;
+
     const startWatching = async () => {
       try {
         await requestPermissionsAsync();
+        
         subscriber = await watchPositionAsync(
           {
             accuracy: Accuracy.BestForNavigation,
